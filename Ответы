@@ -1,0 +1,15 @@
+Response()
+    data
+    status
+    template_name
+    HTMLRenderer
+    headers
+    content_type
+.data
+.status_code
+.content
+.template_name
+.accepted_renderer
+.accepted_media_type
+.renderer_context
+.render()

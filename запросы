@@ -1,0 +1,11 @@
+.data
+.query_params
+.parsers
+.accepted_renderer
+.accepted_media_type
+.user
+.auth
+.authenticators
+.method
+.content_type
+.stream
