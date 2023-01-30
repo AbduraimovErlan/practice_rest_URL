@@ -1,0 +1,70 @@
+REST_FRAMEWORK = {
+    'DERAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        )
+    }
+
+
+
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+
+class ExampleView(APIView):
+    parser_classes = (JSONParser,)
+    def post(self, request, format=None):
+        return Response({'received data': request.data})
+
+
+from rest_framework.decorators import api_view
+from rest_framework.decorators import parser_classes
+from rest_framework.parser import JSONParser
+
+
+@api_view(['POST'])
+@parser_classes((JSONParser, ))
+def example_view(request, format=None):
+    return Response({'received data': request.data})
+
+
+views.py
+class FileUploadView(views.APIView):
+    parser_classes = (FileUploadParser, ):
+    def put(self, request, filename, format=None):
+    file_obj = request.data['file']
+    return Response(status=204)
+
+
+urls.py
+urlpatterns = [
+    url(r'^upload/(?P<filename>[^/]+)$', FileUploadView.as_view())
+
+class PlainTextParser(BaseParser):
+    def parse(self, stream, media_type=None, parser_context=None):
+        return stream.read()
+
+
+
+pip install djangorestframework-yaml
+
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework_yaml.parsers.YAMLParser',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework_yaml.renderers.YAMLRenderer',
+    ),
+}
+
+
+pip install djangorestframework-xml
+
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework_xml.parsers.XMLParser',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework_xml.renderers.XMLRenderer',
+    ),
+}

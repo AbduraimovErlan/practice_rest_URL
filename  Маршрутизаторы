@@ -1,0 +1,112 @@
+from rest_framework import routers
+
+router = router.SimpleRouter()
+router.register(r'users', UserViewSet)
+router.register(r'accounts', AccountViewSet)
+urlpatterns = router.urls
+
+.prefix
+.viewset
+.base_name
+
+
+router = router.SimpleRouter()
+router.register(r'users', UserViewSet)
+router.register(r'accounts', AccountViewSet)
+
+
+urlpatterns = [
+    url(r'^forgot-password/$', ForgotPasswordFormView.as_view()),
+]
+
+urlpatterns += router.urls
+
+urlpatterns = [
+    url(r'forgot-password/$', ForgotPasswordFormView.as_view()),
+    url(r'^', include(router.urls)),
+    ]
+
+
+   urlpatterns = [
+       url(r'^forgot-password/$', ForgotPasswordFormView.as_view()),
+       url(r'^api/', include(router.urls, namespace='api')),
+
+   ]
+
+
+   from myapp.permissions import IsAdminOrIsSelf
+   from rest_framework.decorators import detail_route
+
+class UserViewSet(ModelViewSet):
+    @detail_route(methods=['post'], permission_classes=[IsAdminOrIsSelf])
+    def set_password(self, request, pk=None):
+
+
+
+from myapp.permissions import IsAdminOrIsSelf
+from rest_framework.decorators import detail_router
+
+class UserViewSet(ModelViewSet):
+    @detail_route(methods=['post'], permission_classes=[IsAdminOrIsSelf], url_path='change-password')
+    def set_password(self, request, pk=None):
+
+
+
+router = SimpleRouter(trailing_slash=False)
+
+class MyModelViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    lookup_field = 'my_model_id'
+    lookup_value_regex = '[0-9a-f]{32}'
+
+
+router = DefaultRouter(trailing_slash=False)
+
+
+
+from rest_framework.routers import Router, DynamicDetailRoute, SimpleRouter
+
+class CustomReadOnlyRouter(SimpleRouter):
+
+routes = [
+    Route(
+        url=r'^{prefix}$',
+        mapping={'get': 'list'}'
+        name='{basename}-list',
+        initkwargs={'suffix': 'List'}
+        ),
+    Route(
+        url=r'^{prefix}/{lookup}$',
+        mapping={'get': 'retrieve'},
+        name={basename}-detail',
+        initkwargs={'suffix': 'Detail'}
+        ),
+    DynamicDetailRoute(
+        url=r'^{prefix}/{lookup}/{methodnamehyphen}$',
+        name='{basename}-{methodnamehyphen}',
+        initkwargs={}
+        )
+    ]
+
+
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'username'
+
+    @detail_route()
+    def group_names(self, request, pk=None):
+    user = self.get_objects()
+    groups = user.groups.all()
+    return Response([group.name for group in groups])
+
+
+router = CustomReadOnlyRouter()
+router.register('users', UserViewSet)
+urlpatterns = router.urls
+
+
+from wq.bd import rest
+from myapp.models import MyModel
+
+rest.router.register_model(MyModel)

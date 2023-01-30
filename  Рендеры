@@ -1,0 +1,36 @@
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
+}
+
+
+
+from django.contrib.auth.models import User
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+
+class UserCountView(APIView):
+    renderer_classes = (JSONRenderer, )
+    def get(self, request, format=None):
+    user_count = User.objects.filter(active=True).count()
+    content = {'user_count': user_count}
+    return Response(content)
+
+
+
+@api_view(['GET'])
+@renderer_classes((JSONRenderer, ))
+def user_count_view(request, format=None):
+    user_count = User.objects.filter(active=True).count()
+    content = {'user_count': user_count}
+    return Response(content)
+
+
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    renderer_classes =

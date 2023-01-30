@@ -1,0 +1,192 @@
+from django.contrib.auth.models import User
+from myapp.serializers import UserSerializer
+from rest_framework import generics
+from rest_framework .permissions import IsAdminUser
+
+
+class UserList(generics.ListCreateAPIVeiw):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (IsAdminUser,)
+
+
+
+class UserList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (ISAdminUser,)
+
+
+    def list(self, request):
+    queryset = self.get_queryset()
+    serializer = UserSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+
+url(r'^users/', ListCreateAPIView.as_view(queryset=User.objects.all(), serializer_class=UserSerializer), name='user-list')
+
+.queryset
+.serializer_class
+.lookup_field
+.lookup_url_kwarg
+.pagination_class
+.filter_backends
+.get_queryset(self)
+
+
+def get_queryset(self):
+    user = self.request.user
+    return user.accounts.all()
+
+.get_object(self)
+
+
+
+def get_objects(self):
+    queryset = self.get_queryset()
+    filter = {}
+    for field in self.multiple_lookup_fields:
+        filter[field] = self.kwargs[field]
+
+    obj = get_object_ur_404(queryset, **filter)
+    self.check_object_permissions(self.request, obj)
+    return obj
+
+.filter_queryset(self, queryset)
+
+def filter_queryset(self, queryset):
+    filter_backends = (CategoryFilter, )
+
+    if 'geo_route' in self.request.query_params:
+        filter_backends = (GeoRouteFilter, CategoryFilter)
+    elif 'geo_point' in self.request.query_params:
+        filter_backends = (GeoPointFilter, CategoryFilter)
+
+    for backend in list(filter_backends):
+        queryset = backend().filter_queryset(self.request, queryset, view=self)
+
+    return queryset
+
+.get_serializer_class(self)
+
+def get_serializer_class(self):
+    if self.request.user.is_staff:
+        return FullaAccountSerializer
+    return BasicAccountSerializer
+
+.perform_create(self, serializer)
+CreateModelMixin
+.perform_update(self, serializer)
+UpdateModelMixin
+.perform_destroy(self, instance)
+DestroyModelMixin
+
+
+def perform_create(self, serializer):
+    serializer.save(user=self.request.user)
+
+def perform_update(self, serializer):
+    instance = serializer.save()
+    send_email_confirmation(user=self.request.user, modified=instance)
+
+
+def perform_create(self, serializer):
+    queryset = SignupRequest.objects.filter(user=self.request.user)
+    if queryset.exists()
+        raise ValidationError('You have already signed up')
+    serializer.save(user=self.request.user)
+
+
+.get_serializer_context(self)
+.get_serializer(self, instance=None, data=None, many=False, partial=False)
+.get_paginated_response(self, data)
+.paginate_queryset(self, queryset)
+.filter_queryset(self, queryset)
+rest_framework.mixins
+.list(request, *args, **kwargs)
+.create(request, *args, **kwargs)
+.retrieve(request, *args, **kwargs)
+.update(request, *args, **kwargs)
+.partial_update(request, *args, **kwargs)
+.destroy(request, *args, **kwargs)
+rest_framework.generics
+
+
+
+CreateAPIView
+post
+GenericAPIView, CreateModelMixin
+
+
+LIstAPIView
+get
+GenericAPIView, ListModelMixin
+
+
+RetrieveAPIView
+get
+GeneticAPIView, RetrieveModelMixin
+
+
+DestroyAPIView
+delete
+GenericAPIView, DestroyModelMixin
+
+
+UpdateAPIView
+put and patch
+GenericAPIView, UpdateModelMixin
+
+
+ListCreateAPIView
+get and post
+GenericAPIView, ListModelMixin, CreateModelMixin
+
+
+RetrieveUpdateAPIView
+get , put  and patch
+GenericAPIView, RetrieveModelMixin, UpdateModelMixin
+
+
+RetrieveDestroyAPIView
+get and delete
+GenericAPIView, RetrieveModelMixin, DestroyModelMixin
+
+RetrieveUpdateDestroyAPIView
+get, put, path and delete
+GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
+
+
+
+"""cheng"""
+
+
+class MultipleFieldLookupMixin(object):
+"""
+Apply this mixin to any view or viewset to get multiple field filtering
+based on a 'lookup_fields' attribute, instead of the default single field filtering.
+
+def get_object(self):
+    queryset = self.get_queryset()
+    queryset = self.filter_queryset(queryset)
+    filter = {}
+    for field in self.lookup_fields:
+        if self.kwargs[field]:
+            filter[field] = self.kwargs[field]
+    obj = get_object_or_404(queryset, **filter)
+    self.check_object_permissions(self.request, obj)
+    return obj
+
+
+class RetrieveUserView(MultipleFieldLookupMixin, generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_fields = ('account', 'username')
+Using custom mixins is a good option if you have custom behavior that needs to be used.
+
+
+class BaseRetrieveView(MultipleFieldLookupMixin, generics.RetrieveAPIView):
+    pass
+
+class BaseRetrieveUpdateDestroyView(MultipleFieldLookupMixin, generics.RetrieveUpdateDestroyAPIView):
